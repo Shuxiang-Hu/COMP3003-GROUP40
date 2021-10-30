@@ -2,12 +2,15 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
     
     % set up support_vector_num and optimal_hyperparameters matrix, 
     % row - the different hp combination
-    % col - either sigma, box constraint and epsilon or q, box constraint and epsilon
+    % col - either sigma, box constraint and epsilon or q, box constraint 
+    %       and epsilon
     support_vector_num = zeros(size(hyperparameters, 1), 3);
     optimal_hyperparameters = zeros(1, 3);
     
     % initialize the best RMSE to be infinite
     min_rmse = Inf;
+
+    data_size = size(y_train, 1);
     
     % hyperparameter tuning 
     for i = 1:size(hyperparameters, 1)
@@ -23,7 +26,7 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
         % model
         for n = 1:k_fold
             support_vector_num(i, n, 1) = length(mdl.Trained{n, 1}.SupportVectors);
-            support_vector_num(i, n, 2) = support_vector_num(i, n, 1)/2400;
+            support_vector_num(i, n, 2) = support_vector_num(i, n, 1)/data_size;
         end
         
         % calculate the average rmse
