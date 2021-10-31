@@ -4,7 +4,7 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
     % row - the different hp combination
     % col - either sigma, box constraint and epsilon or q, box constraint 
     %       and epsilon
-    support_vector_num = zeros(size(hyperparameters, 1), 3);
+    support_vector_num = zeros(size(hyperparameters, 1), k_fold);
     optimal_hyperparameters = zeros(1, 3);
     
     % initialize the best RMSE to be infinite
