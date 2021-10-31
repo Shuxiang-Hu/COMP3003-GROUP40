@@ -1,0 +1,48 @@
+%% 
+clear;
+clc;
+
+%% useful pre-set data
+
+training_data_name = 'datatraining';
+test_data_name = 'datatest';
+
+fprintf(['Process dataset: ', training_data_name, ' original data\n']);
+fprintf(['Process dataset: ', test_data_name, ' original data\n']);
+training_set = [training_data_name, '.csv'];
+test_set = [test_data_name, '.csv'];
+
+num_attributes = 5;
+num_labels = 2;
+num_sets = 1;
+num_training_lines = 1000; % count of training data
+num_test_lines = 200;      % count of test data
+
+features_training = zeros(num_training_lines, num_attributes);
+
+features_test = zeros(num_test_lines, num_attributes);
+
+%% extract features and labels in training dataset and test dataset
+
+training_file = csvread(training_set, 1, 2);
+num_label1 = 0;
+num_label2 = 0;
+total_num = 0;
+pointer_row_file = 1;
+while num_label1 <= num_training_lines / 2 && num_label2 <= num_training_lines / 2
+    if (num_label1 <= num_training_lines / 2) && (training_file(pointer_row_file:))
+    end
+   features_training()
+end
+
+
+test_file = fopen(test_set);
+if f == -1
+    error('Fail to open file %s#n', training_set);
+end
+
+label1 = 0;
+label2 = 0;
+while label1 <= num_test_lines / 2 && label2 <= num_test_lines / 2
+    data_label = la
+end
