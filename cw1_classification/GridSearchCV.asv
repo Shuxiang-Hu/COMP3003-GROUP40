@@ -1,0 +1,66 @@
+% brute force
+% param : features - 
+%         labels - 
+%         hyperparameters - pre-set hyper parameters used to evaluate
+%         kernal_method - 'rbf' or 'polynomial'
+function [optimise_hyperparameters, support_vector_stats, opt_rmse] = GridSearchCV(features, labels, param_grid, kernel_method, k_fold)
+
+    % sigma for RBF and q for the polynomial kernel; box-constraint C
+    optimise_hyperparameters = zeros(1,2);
+    if kernel_method == "rbf"
+        [c, sigma] = ndgrid(param_grid.c, param_grid.sigma);
+        hp_combination_set = [c(:) sigma(:)];
+        num_combination = size(hp_combination_set, 1);
+        support_vector_stats = struct("c", zeros(1,num_combination), "sigma", zeros(1,num_combination),...
+            "rmse", zeros(1,num_combiation)
+            "fold", zeros(1,num_combination));
+    elseif kernel_method == "polynomial"
+        [c, q] = ndgrid(param_grid.c, param_grid.q);
+        hp_combination_set = [c(:) q(:)];
+        num_combination = size(hp_combination_set, 1);
+        support_vector_stats = struct("c", zeros(1,num_combination), "q", zeros(1,num_combination), "rmse", zeros(1,num_combiation),...
+            "fold", zeros(2, k_fold,num_combination));
+    else
+        error("Invalid kernel method");
+    end
+    
+    % here we create a 2-d matrix, but actually we want a 4-d matrix,
+    % the way to track the value: 
+    %       svs(c, sigma/q, k_fold, 1) is number of support vector
+    %       svs(c, sigma/q, k_fold, 2) is a % of the training data
+    %           where c, sigma and q is the index of lists in param_gird
+    %support_vector_stats = zeros(size(hp_combination_set,1), hyperparameters.k_fold);
+    data_size = size(labels, 1);
+    
+    opt_rmse = Inf;
+
+    for i = 1 : num_combination
+        
+        % Two different kernal functions: rbf and polynomial
+        mdl = fitcsvm(features, labels, 'KernelFunction',kernel_method, 'KernelScale', hp_combination_set(i, 1), 'BoxConstraint', hp_combination_set(i, 2) , 'Standardize', true, 'KFold', k_fold);
+
+        rmse = sqrt(kfoldLoss(mdl));
+        
+        if (rmse <= opt_rmse)
+            optimise_hyperparameters(:) = hp_combination_set(i, :);
+            opt_rmse = rmse;
+        end
+        
+        folds = zeros(2,k_fold);
+        for k = 1 : k_fold
+            folds(1,k) = 
+        end
+        
+        support_vector_stats(i).c = hp_combination_set(i, 1);
+        if kernel_method == "rbf"
+            support_vector_stats(i).sigma = hp_combination_set(i, 2);
+        elseif kernel_method == "polynomial"
+            support_vector_stats(i).q = hp_combination_set(i, 2);
+        end
+        support_vector_stats(i).folds = folds;
+        support_vector_stats(i).rmse = rmse;
+        support_vector_stats(i).num_sv = length(mdl.Trained{k, 1}.SupportVectors);
+        support_vector_stats(i).percent_traingdata = support_vector_stats(i).num_sv / data_size;
+
+    end
+end
