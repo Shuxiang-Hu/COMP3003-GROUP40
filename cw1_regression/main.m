@@ -1,13 +1,9 @@
 
 
 
-data = load_data('../data/70E_50C_3000N_5Cov.csv',[2,inf])
 
-
-
-
-
-
-function run(filepath, kfold, lfold)
-    
+function run(filepath, kfold, lfold,kernel_method,hyper_parameters)
+    data = load_data(filepath);
+    x,y = preprocess(data);
+    model = train(x,y,kfold,lfold,kernel_method,hyper_parameters);
 end

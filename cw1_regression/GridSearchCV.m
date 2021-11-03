@@ -1,3 +1,4 @@
+
 function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(x_train, y_train, kernel_method, hyperparameters, k_fold)
     
     % set up support_vector_num and optimal_hyperparameters matrix, 
@@ -10,9 +11,6 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
     % initialize the best RMSE to be infinite
     min_rmse = Inf;
 
-    % set up the initial ending index for the validation set
-    validation_end = 0;
-
     % set up the dataset size (how many observations)
     dataset_size = size(y_train, 1);
     
@@ -21,6 +19,9 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
 
         % initialize the RMSE matrix for this set of hyperparameters
         rmses = zeros(1, k_fold);
+
+        % initialize ending index for the validation set
+        validation_end = 0;
 
         % inner cross-validation
         for j = 1:k_fold
@@ -36,9 +37,10 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
             % check for kernel method type and train the SVM regression model
             if strcmp(kernel_method, 'gaussian_rbf')
                 mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','rbf', 'KernelScale', hyperparameters(i, 1), 'BoxConstraint', hyperparameters(i, 2), 'Epsilon', hyperparameters(i, 3));
-            end
-            if strcmp(kernel_method, 'polynomial') 
+            elseif strcmp(kernel_method, 'polynomial') 
                 mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','polynomial', 'PolynomialOrder', hyperparameters(i, 1), 'BoxConstraint', hyperparameters(i, 2), 'Epsilon', hyperparameters(i, 3));
+            else
+                error("Invalid kernel method");
             end
             
             % evaluate the model by predicting on the validation set

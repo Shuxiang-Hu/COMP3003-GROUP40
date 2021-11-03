@@ -26,6 +26,7 @@ data_all = data_all(ir,:);
 ctrain_start = tic;
 model_classification = fitcsvm(data_all(:,1:5),data_all(:,6), 'KernelFunction',TASK1_KF, 'BoxConstraint',1);
 ctrain_elapsed = toc(ctrain_start);
+sv = model_classification.SupportVectors;
 
 % 10-fold cross-validation
 crossval_start = tic;
@@ -34,10 +35,16 @@ classLoss = kfoldLoss(model_cross);
 crossval_elapsed = toc(crossval_start);
 
 % Results
-fprintf('Training done in: %f seconds.\n',ctrain_elapsed);
-fprintf('Cross-validation done in: %f seconds.\n',crossval_elapsed);
-fprintf('Accuracy: %f\n',1-classLoss);
+fprintf('SVM linear training done in: %f seconds.\n',ctrain_elapsed);
+fprintf('10-fold cross-validation done in: %f seconds.\n',crossval_elapsed);
+fprintf('Accuracy: %f\n\n',1-classLoss);
 
+figure
+gscatter(data_all(:,1),data_all(:,2),data_all(:,6))
+hold on
+plot(sv(:,1),sv(:,2),'ko','MarkerSize',10)
+legend('occu','not','Support Vector')
+hold off
 
 %% task2 - Brute Force
 param_grid.c = 10.^(-5:5);
@@ -51,11 +58,11 @@ else
 end
 
 task2_start = tic;
-[optimise_hyperparameters, op_stats, opt_rmse] = GridSearchCV(data_all(:, 1:5), data_all(:,6), param_grid, TASK2_KF, K_FOLD);
+[optimise_hyperparameters, op_stats, opt_acc] = GridSearchCV(data_all(:, 1:5), data_all(:,6), param_grid, TASK2_KF, K_FOLD);
 tast2_end = toc(task2_start);
 
-fprintf("Training done in: %f seconds.\n\n",ctrain_elapsed);
-for i = 1 : size(op_stats,1)
-    fprintf("Combination: %3d | c: %6d | sigma: %6d | rmse: %6d\n", i, op_stats.c, op_stats.sigma, op_stats.rmse);
+fprintf("Optimisation of hyper-parameter done in: %f seconds.\n",tast2_end);
+for i = 1 : length(op_stats)
+    fprintf("Combination: %d | c: %f | sigma: %f | acc: %f\n", i, op_stats(i).c, op_stats(i).sigma, op_stats(i).acc);
 end
-fprintf("\nOptimise Combition is c: %6d, sigma/q: %6d  \n" + optimise_hyperparameters(1,1), optimise_hyperparameters(1,2));
+fprintf("\nOptimise Combition is c: %f, sigma/q: %f\n", optimise_hyperparameters(1,1), optimise_hyperparameters(1,2));
