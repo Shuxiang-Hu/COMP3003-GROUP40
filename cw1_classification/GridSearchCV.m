@@ -54,9 +54,9 @@ function [optimise_hyperparameters, op_stats, opt_rmse] = GridSearchCV(features,
             % train the model
             mdl = fitcsvm(features_train, labels_train, 'KernelFunction',kernel_method, 'KernelScale', hp_combination_set(i, 1), 'BoxConstraint', hp_combination_set(i, 2) , 'Standardize', true);
             labels_predict = mdl.predict(features_test);
-            
+            git a
             rmses(1,k) = sqrt(mean(labels_test - labels_predict).^2);
-            
+                
             stats(k,1) = length(mdl.SupportVectors);
             stats(k,2) = stats(k,1) / data_size;
             stats(k,3) = rmses(1,k);
