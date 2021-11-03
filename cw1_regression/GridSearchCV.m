@@ -11,9 +11,6 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
     % initialize the best RMSE to be infinite
     min_rmse = Inf;
 
-    % set up the initial ending index for the validation set
-    validation_end = 0;
-
     % set up the dataset size (how many observations)
     dataset_size = size(y_train, 1);
     
@@ -22,6 +19,9 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
 
         % initialize the RMSE matrix for this set of hyperparameters
         rmses = zeros(1, k_fold);
+
+        % initialize ending index for the validation set
+        validation_end = 0;
 
         % inner cross-validation
         for j = 1:k_fold
