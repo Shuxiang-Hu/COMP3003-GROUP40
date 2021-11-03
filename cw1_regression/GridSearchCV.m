@@ -36,9 +36,10 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
             % check for kernel method type and train the SVM regression model
             if strcmp(kernel_method, 'gaussian_rbf')
                 mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','rbf', 'KernelScale', hyperparameters(i, 1), 'BoxConstraint', hyperparameters(i, 2), 'Epsilon', hyperparameters(i, 3));
-            end
-            if strcmp(kernel_method, 'polynomial') 
+            elseif strcmp(kernel_method, 'polynomial') 
                 mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','polynomial', 'PolynomialOrder', hyperparameters(i, 1), 'BoxConstraint', hyperparameters(i, 2), 'Epsilon', hyperparameters(i, 3));
+            else
+                error("Invalid kernel method");
             end
             
             % evaluate the model by predicting on the validation set
