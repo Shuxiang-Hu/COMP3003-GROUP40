@@ -1,9 +1,9 @@
 function data = load_data(filename, dataLines)
-%IMPORTFILE Import data from a text file
-%  E50C3000N5COV = IMPORTFILE(FILENAME) reads data from text file
+%LOAD_DATA LOAD data from a text file
+%  DATA = LOAD_DATA(FILENAME) reads data from text file
 %  FILENAME for the default selection.  Returns the data as a table.
 %
-%  E50C3000N5COV = IMPORTFILE(FILE, DATALINES) reads data for the
+%  DATA = IMPORTFILE(FILE, DATALINES) reads data for the
 %  specified row interval(s) of text file FILENAME. Specify DATALINES as
 %  a positive scalar integer or a N-by-2 array of positive scalar
 %  integers for dis-contiguous row intervals.
