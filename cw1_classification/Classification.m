@@ -28,17 +28,6 @@ model_classification = fitcsvm(data_all(:,1:5),data_all(:,6), 'KernelFunction',T
 ctrain_elapsed = toc(ctrain_start);
 sv = model_classification.SupportVectors;
 
-% 10-fold cross-validation
-crossval_start = tic;
-model_cross = crossval(model_classification);
-classLoss = kfoldLoss(model_cross);
-crossval_elapsed = toc(crossval_start);
-
-% Results
-fprintf('SVM linear training done in: %f seconds.\n',ctrain_elapsed);
-fprintf('10-fold cross-validation done in: %f seconds.\n',crossval_elapsed);
-fprintf('Accuracy: %f\n\n',1-classLoss);
-
 figure
 gscatter(data_all(:,1),data_all(:,2),data_all(:,6))
 hold on
