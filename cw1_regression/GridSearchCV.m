@@ -11,9 +11,6 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
     % initialize the best RMSE to be infinite
     min_rmse = Inf;
 
-    % set up the dataset size (how many observations)
-    dataset_size = size(y_train, 1);
-    
     % hyperparameter tuning 
     for i = 1:size(hyperparameters, 1)
 
@@ -50,7 +47,7 @@ function [support_vector_num, optimal_hyperparameters, min_rmse] = GridSearchCV(
             % record the number and percentage of the support vectors for each
             % model
             support_vector_num(i, j, 1) = length(mdl.SupportVectors);
-            support_vector_num(i, j, 2) = support_vector_num(i, j, 1)/dataset_size;
+            support_vector_num(i, j, 2) = support_vector_num(i, j, 1)/size(x_train_set);
         end
 
         % calculate the average RMSE for this set of hyperparameters
