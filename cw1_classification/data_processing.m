@@ -23,7 +23,13 @@ l1_set = training_file(label1,:);
 l0_set = training_file(label0,:);
 
 %% Normalisation
-normal1 = mapminmax(l1_set(:, 1:5)', 0, 1);
 normal0 = mapminmax(l0_set(:, 1:5)', 0, 1);
+normal1 = mapminmax(l1_set(:, 1:5)', 0, 1);
+
+%% Correlation analysis
+corr = corrcoef([normal0 normal1]');
+% feature 2 and 5 are correlated
+
+%% Write datasets
 writematrix([normal0' l0_set(:, 6)], 'datalabel0.txt');
 writematrix([normal1' l1_set(:, 6)], 'datalabel1.txt');

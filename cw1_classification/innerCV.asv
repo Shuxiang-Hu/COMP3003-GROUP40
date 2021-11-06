@@ -48,9 +48,9 @@ function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_trai
             
             % train the model
             if strcmp(kernel_method, "rbf")
-                mdl = fitcsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "KernelScale", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
+                mdl = fitrsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "KernelScale", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
             elseif strcmp(kernel_method, "polynomial") 
-                mdl = fitcsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "PolynomialOrder", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
+                mdl = fitrsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "PolynomialOrder", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
             end
             labels_predict = mdl.predict(x_validation_set);
             accs(1,k) = length(find(labels_predict == y_validation_set))/length(labels_predict);

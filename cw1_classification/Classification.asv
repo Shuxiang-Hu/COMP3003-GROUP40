@@ -9,7 +9,7 @@ K_FOLD = 10;
 
 % kernel function
 TASK1_KF = "linear";
-TASK2_KF = "rbf";
+TASK2_KF = "polynomial";
 
 % load data
 label0_data = importdata("datalabel0.txt");
@@ -50,7 +50,7 @@ task2_start = tic;
 [op_stats, optimise_hyperparameters, opt_acc] = innerCV(data_all(:, 1:5), data_all(:,6), TASK2_KF, param_grid, K_FOLD);
 tast2_elapsed = toc(task2_start);
 
-% result
+%res
 fprintf("Optimisation of hyper-parameter done in: %f seconds.\n",tast2_elapsed);
 % for i = 1 : length(op_stats)
 %     fprintf("Combination: %d | c: %f | sigma: %f\n", i, op_stats(i).c, op_stats(i).sigma);
