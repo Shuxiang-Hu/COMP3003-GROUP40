@@ -28,7 +28,9 @@ normal1 = mapminmax(l1_set(:, 1:5)', 0, 1);
 
 %% Correlation analysis
 corr = corrcoef([normal0 normal1]');
-% feature 2 and 5 are correlated
+% feature 2 and 5 are highly correlated
+normal0 = normal0(1:4, :);
+normal1 = normal1(1:4, :);
 
 %% Write datasets
 writematrix([normal0' l0_set(:, 6)], 'datalabel0.txt');
