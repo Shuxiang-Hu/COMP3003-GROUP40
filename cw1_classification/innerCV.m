@@ -59,7 +59,7 @@ function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_trai
             stats(k,2) = stats(k,1) / size(x_train_set, 1);
         end
         
-        % update the minimize rmse
+        % update the minimize accuracy
         ave_acc = mean(accs);
         if (ave_acc > opt_acc)
             optimise_hyperparameters(:) = param_grid(i, :);
