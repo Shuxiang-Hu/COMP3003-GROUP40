@@ -13,10 +13,10 @@ function [hyperparameter_stats, optimise_hyperparameters, opt_acc] = innerCV(x_t
     % pre-allocate the memory for op_stats
     if strcmp(kernel_method, "rbf")
         hyperparameter_stats = struct("sigma", zeros(1,param_size), "c", zeros(1,param_size), ...
-            "sv_stats", zeros(2,k_fold,param_size));
+            "sv_stats", zeros(2,k_fold,param_size), "acc", zeros(1, param_size));
     elseif strcmp(kernel_method, "polynomial") 
         hyperparameter_stats = struct("q", zeros(1,param_size), "c", zeros(1,param_size), ...
-            "sv_stats", zeros(2,k_fold,param_size));
+            "sv_stats", zeros(2,k_fold,param_size), "acc", zeros(1, param_size));
     else
         error("Invalid kernel method");
     end
@@ -59,7 +59,7 @@ function [hyperparameter_stats, optimise_hyperparameters, opt_acc] = innerCV(x_t
             stats(k,2) = stats(k,1) / size(x_train_set, 1);
         end
         
-        % update the minimize rmse
+        % update the minimize accuracy
         ave_acc = mean(accs);
         if (ave_acc > opt_acc)
             optimise_hyperparameters(:) = param_grid(i, :);
@@ -74,6 +74,7 @@ function [hyperparameter_stats, optimise_hyperparameters, opt_acc] = innerCV(x_t
             hyperparameter_stats(i).q = param_grid(i, 1);
         end
         hyperparameter_stats(i).sv_stats = stats;
-
+        hyperparameter_stats(i).acc = ave_acc;
+      
     end
 end

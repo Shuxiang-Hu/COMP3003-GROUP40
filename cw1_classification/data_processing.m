@@ -4,7 +4,9 @@ clc;
 
 %% useful pre-set data
 
-file_name = 'datatraining.txt';
+file1_name = 'datatraining.txt';
+file2_name = 'datatest.txt';
+file3_name = 'datatest2.txt';
 
 num_attributes = 5;
 num_labels = 2;
@@ -15,12 +17,17 @@ features_training = zeros(num_lines, num_attributes);
 
 %% extract features and labels in training dataset and test dataset
 
-training_file = importdata(file_name).data;
-label1 = training_file(:,6) == 1;
-label0 = training_file(:,6) == 0;
+training_file1 = importdata(file1_name).data;
+test_file2 = importdata(file2_name).data;
+test_file3 = importdata(file3_name).data;
 
-l1_set = training_file(label1,:);
-l0_set = training_file(label0,:);
+total = [training_file1; test_file2; test_file3];
+
+label1 = total(:,6) == 1;
+label0 = total(:,6) == 0;
+
+l1_set = total(label1,:);
+l0_set = total(label0,:);
 
 %% Normalisation
 normal0 = mapminmax(l0_set(:, 1:5)', 0, 1);
