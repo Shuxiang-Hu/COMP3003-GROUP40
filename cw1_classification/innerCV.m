@@ -4,7 +4,7 @@
 %         kernal_method - "rbf" or "polynomial"
 %         param_grid - the combination of hyperparameters
 %         k_fold -
-function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_train, kernel_method, param_grid, k_fold)
+function [hyperparameter_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_train, kernel_method, param_grid, k_fold)
 
     % sigma for RBF and q for the polynomial kernel; box-constraint C
     optimise_hyperparameters = zeros(1,2);
@@ -12,10 +12,10 @@ function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_trai
     
     % pre-allocate the memory for op_stats
     if strcmp(kernel_method, "rbf")
-        op_stats = struct("sigma", zeros(1,param_size), "c", zeros(1,param_size), ...
+        hyperparameter_stats = struct("sigma", zeros(1,param_size), "c", zeros(1,param_size), ...
             "sv_stats", zeros(2,k_fold,param_size));
     elseif strcmp(kernel_method, "polynomial") 
-        op_stats = struct("q", zeros(1,param_size), "c", zeros(1,param_size), ...
+        hyperparameter_stats = struct("q", zeros(1,param_size), "c", zeros(1,param_size), ...
             "sv_stats", zeros(2,k_fold,param_size));
     else
         error("Invalid kernel method");
@@ -67,13 +67,13 @@ function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_trai
         end
         
         % write the data into return value
-        op_stats(i).c = param_grid(i, 2);
+        hyperparameter_stats(i).c = param_grid(i, 2);
         if strcmp(kernel_method, "rbf")
-            op_stats(i).sigma = param_grid(i, 1);
+            hyperparameter_stats(i).sigma = param_grid(i, 1);
         elseif strcmp(kernel_method, "polynomial")
-            op_stats(i).q = param_grid(i, 1);
+            hyperparameter_stats(i).q = param_grid(i, 1);
         end
-        op_stats(i).sv_stats = stats;
+        hyperparameter_stats(i).sv_stats = stats;
 
     end
 end

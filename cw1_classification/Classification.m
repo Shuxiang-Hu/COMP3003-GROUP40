@@ -3,8 +3,8 @@ clc;
 
 %% Load data and Related element
 % pre-set element
-NUM_LABEL0_DATA = 100;
-NUM_LABEL1_DATA = 100;
+NUM_LABEL0_DATA = 1000;
+NUM_LABEL1_DATA = 1000;
 K_FOLD = 10;
 
 % kernel function
