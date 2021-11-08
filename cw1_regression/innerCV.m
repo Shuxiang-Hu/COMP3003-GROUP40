@@ -58,10 +58,10 @@ function [hyperparameter_stats, opt_hyperparameters, opt_rmse] = innerCV(x_train
             
             % check for kernel method type and train the SVM regression model
             if strcmp(kernel_method, 'rbf')
-                mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','rbf', 'KernelScale', param_grid(i, 1), 'BoxConstraint', param_grid(i, 2), 'Epsilon', param_grid(i, 3));
+                mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','rbf', 'KernelScale', param_grid(i, 1), 'BoxConstraint', param_grid(i, 2), 'Epsilon', param_grid(i, 3), 'Standardize', true);
             end
             if strcmp(kernel_method, 'polynomial') 
-                mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','polynomial', 'PolynomialOrder', param_grid(i, 1), 'BoxConstraint', param_grid(i, 2), 'Epsilon', param_grid(i, 3));
+                mdl = fitrsvm(x_train_set, y_train_set, 'KernelFunction','polynomial', 'PolynomialOrder', param_grid(i, 1), 'BoxConstraint', param_grid(i, 2), 'Epsilon', param_grid(i, 3), 'Standardize', true);
             end
             
             % evaluate the model by predicting on the validation set
