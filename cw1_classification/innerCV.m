@@ -48,18 +48,18 @@ function [op_stats, optimise_hyperparameters, opt_acc] = innerCV(x_train, y_trai
             
             % train the model
             if strcmp(kernel_method, "rbf")
-                mdl = fitrsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "KernelScale", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
+                mdl = fitcsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "KernelScale", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
             elseif strcmp(kernel_method, "polynomial") 
-                mdl = fitrsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "PolynomialOrder", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
+                mdl = fitcsvm(x_train_set, y_train_set, "KernelFunction", kernel_method, "PolynomialOrder", param_grid(i, 1), "BoxConstraint", param_grid(i, 2));
             end
             labels_predict = mdl.predict(x_validation_set);
-            accs(1,k) = length(find((labels_predict - y_validation_set) == 0))/length(labels_predict);
+            accs(1,k) = length(find(labels_predict == y_validation_set))/length(labels_predict);
            
             stats(k,1) = length(mdl.SupportVectors);
             stats(k,2) = stats(k,1) / size(x_train_set, 1);
         end
         
-        % update the minimize rmse
+        % update the minimize accuracy
         ave_acc = mean(accs);
         if (ave_acc > opt_acc)
             optimise_hyperparameters(:) = param_grid(i, :);
