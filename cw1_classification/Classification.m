@@ -27,11 +27,61 @@ data_all = data_all(ir,:);
 
 %% Task1 Linear model
 task1_start = tic;
-model_classification = fitcsvm(data_all(:,1:4),data_all(:,5), 'KernelFunction',TASK1_KF, 'BoxConstraint',1);
+fold = 10;
+x = data_all(:, 1:4);
+y = data_all(:,5);
+num_instances = height(x);
+fold_size = floor(num_instances/fold);
+fold_start = 1;
+fold_end = fold_size;
+
+mean_confusion_matrix = [0,0;0,0];
+mean_accuracy = 0;
+for k = 1:fold
+        
+        % split test and train
+        x_test = x(fold_start:fold_end,:);
+        y_test = y(fold_start:fold_end,:);
+        x_train = x;
+        x_train(fold_start:fold_end,:) = [];
+        y_train = y;
+        y_train(fold_start:fold_end,:) = [];
+        model = fitcsvm(data_all(:,1:4),data_all(:,5), 'KernelFunction',TASK1_KF, 'BoxConstraint',1);
+        
+        % predict and evaluate
+        y_pre = model.predict(x_test);
+        
+        % compute the confusion matrix
+        %         actual  0     1
+        % predict         
+        %       0         TN    FN
+        %       1         FP    TP
+        temp = y_pre+y_test;
+        TN = sum(temp == 0);
+        TP = sum(temp ==2);
+        temp = y_pre - y_test;
+        FP = sum(temp == 1);
+        FN = sum(temp == -1);
+        acc = (TP+TN)/(TP+TN+FP+FN);
+        mean_accuracy = acc+mean_accuracy
+        mean_confusion_matrix  = mean_confusion_matrix + [TN,FN;FP,TP];
+        fprintf("Generalized accuracy on %dth folder: %f\n", k,acc);
+        fprintf("Confusion Matrix for fold %d: \n",k);
+        fprintf("TN:%d FN:%d\n",TN,FN);
+        fprintf("FP:%d TP:%d\n",FP,TP);
+        
+        fold_start = fold_start + fold_size;
+        fold_end = fold_end + fold_size;
+        if k == fold - 1
+            fold_end = num_instances;
+        end
+        
+    end
 task1_elapsed = toc(task1_start);
 
 fprintf("Linear SVM training done in: %f seconds.\n",task1_elapsed);
-
+mean_confusion_matrix = mean_confusion_matrix/fold
+mean_accuracy = mean_accuracy / fold
 
 %% Task2 - Brute Force
 % parameter range setting
@@ -125,6 +175,6 @@ task2_start = tic;
 tast2_end = toc(task2_start);
 fprintf("Optimisation of hyper-parameter done in: %f seconds.\n",tast2_end);
 fprintf("Average Confusion Matrix over the folds:\n ");
-mean_confusion_matrix/kfold
+mean_confusion_matrix = mean_confusion_matrix/kfold
 
 
