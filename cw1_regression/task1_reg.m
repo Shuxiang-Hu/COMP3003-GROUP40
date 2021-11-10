@@ -5,26 +5,8 @@ close all;
 filename = "70E_50C_3000N_5Cov.csv";
 dataLines = [2, Inf];
 %% Set up the Import Options and import the data
-opts = delimitedTextImportOptions("NumVariables", 10);
-
-% Specify range and delimiter
-opts.DataLines = dataLines;
-opts.Delimiter = ",";
-
-% Specify column names and types
-opts.VariableNames = ["nid", "status", "start", "stop", "z", "x", "x1", "x2", "x3", "x4"];
-opts.VariableTypes = ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double"];
-
-% Specify file level properties
-opts.ExtraColumnsRule = "ignore";
-opts.EmptyLineRule = "read";
-
-% Import the data
-data = readtable(filename, opts);
-
-data(any(ismissing(data),2),:) = [];
-x = data(:,{'x','x1','x2','x3','x4'});  
-y = data(:,{'stop'});
+data = load_data(filename, dataLines);
+[x, y] = preprocess(data);
 
 %% train model
 x_test = x(1:300,:);
@@ -43,7 +25,6 @@ rmses = sqrt(mean(y_pre - table2array(y_test)).^2);
 figure,plot(table2array(x_test(:,2)), table2array(y_test(:,1)),'or');
 figure,plot(table2array(x_test(:,2)), y_pre(:,1),'or');
 
-hold on;plot(X_prediction,Y_prediction,'b');
 title("linear regression on original data");
 
 
