@@ -3,7 +3,7 @@ function [hyperparameter_stats, opt_hyperparameters, opt_rmse] = innerCV(x_train
     
     dataset_size = size(x_train, 1);
     param_size = size(param_grid, 1);
-    
+    fprintf("Start of inner crossvalidation\n");
     % pre-allocate the memory for op_stats
     if strcmp(kernel_method, "rbf")
         hyperparameter_stats = struct("sigma", zeros(1, param_size), "c", zeros(1, param_size), ...
@@ -26,7 +26,7 @@ function [hyperparameter_stats, opt_hyperparameters, opt_rmse] = innerCV(x_train
 
     % hyperparameter tuning 
     for i = 1:size(param_grid, 1)
-
+        
         % initialize the RMSE matrix for this set of hyperparameters
         rmses = zeros(1, k_fold);
 
@@ -34,15 +34,19 @@ function [hyperparameter_stats, opt_hyperparameters, opt_rmse] = innerCV(x_train
         validation_end = 0;
        
         % check for kernel method type and record current hyperparameter
+        hyperparameter_stats(i).c = param_grid(i, 2);
+        hyperparameter_stats(i).epsilon = param_grid(i, 3);
         if strcmp(kernel_method, 'rbf')
             hyperparameter_stats(i).sigma = param_grid(i, 1);
+            fprintf("Training with sigma: %f, c:%f,ep:%f\n",hyperparameter_stats(i).sigma,hyperparameter_stats(i).c,hyperparameter_stats(i).epsilon);
+
         end
         if strcmp(kernel_method, 'polynomial') 
             hyperparameter_stats(i).q = param_grid(i, 1);
+            fprintf("Training with q:%f,c:%f,ep:%f\n",hyperparameter_stats(i).q,hyperparameter_stats(i).c,hyperparameter_stats(i).epsilon);
+
         end
-        hyperparameter_stats(i).c = param_grid(i, 2);
-        hyperparameter_stats(i).epsilon = param_grid(i, 3);
-        
+
         sv_stats = zeros(k_fold,2);
 
         % inner cross-validation
@@ -79,11 +83,13 @@ function [hyperparameter_stats, opt_hyperparameters, opt_rmse] = innerCV(x_train
 
         % calculate the average RMSE for this set of hyperparameters
         average_rmse = mean(rmses);
-
+        fprintf("Average RMSE: %f\n",average_rmse)
         % record the result if the model is better than previous
         if(average_rmse<=opt_rmse)
             opt_hyperparameters(:) = param_grid(i, :);
             opt_rmse = average_rmse;
         end
+        
     end
+    fprintf("End of inner crossvalidation\n");
 end

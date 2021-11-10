@@ -9,7 +9,7 @@ function data = load_data(filename, dataLines)
 %  integers for dis-contiguous row intervals.
 %
 %  Example:
-%  E50C3000N5Cov = importfile("/Users/hushuxiang/Documents/ML/COMP3003-GROUP40/data/70E_50C_3000N_5Cov.csv", [2, Inf]);
+%  E50C3000N5Cov = importfile("data/train.csv", [2, Inf]);
 %
 %  See also READTABLE.
 %
