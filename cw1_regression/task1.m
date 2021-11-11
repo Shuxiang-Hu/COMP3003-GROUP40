@@ -3,7 +3,7 @@
 clear all;
 close all;
 %% Data Preprocessing
-filename = "data/train.csv";
+filename = "data.csv";
 dataLines = [2, Inf];
 %% Set up the Import Options and import the data
 data = load_data(filename, dataLines);
@@ -17,6 +17,7 @@ kfold = 10;
  fold_start = 1;
  fold_end = fold_size;
  mean_rmse = 0;
+ mean_sup = 0;
 for k = 1:kfold
         
     % split test and train
@@ -26,13 +27,15 @@ for k = 1:kfold
     x_train(fold_start:fold_end,:) = [];
     y_train = y;
     y_train(fold_start:fold_end,:) = [];
-    eps = 1;
+    eps = 0;
     model = fitrsvm(x_train, y_train, 'KernelFunction', 'linear', 'BoxConstraint', 1, 'Epsilon', eps);
      
     y_pre = model.predict(x_test);
     rmse = sqrt(mean(y_pre - table2array(y_test)).^2);
 
-    fprintf("RMSE of %dth fold: %f\n",k,rmse);
+    %fprintf("RMSE of %dth fold: %f\n",k,rmse);
+    fprintf("num of supvec of %dth fold: %f\n",k,length(model.SupportVectors));
+    mean_sup = mean_sup + length(model.SupportVectors);
     mean_rmse = mean_rmse+rmse;
     fold_start = fold_start + fold_size;
     fold_end = fold_end + fold_size;
@@ -41,11 +44,9 @@ for k = 1:kfold
     end
 end
 mean_rmse = mean_rmse/kfold;
+mean_sup = mean_sup/kfold;
 fprintf("Average rmse: %f\n",mean_rmse);
 figure,plot(table2array(x_test(:,2)), table2array(y_test(:,1)),'or');
 figure,plot(table2array(x_test(:,2)), y_pre(:,1),'or');
 
 title("linear regression on original data");
-
-
-
