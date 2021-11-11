@@ -8,8 +8,11 @@ function [x,y] = preprocess(data)
 %  Example:
 %  x,y = importfile(data_table);
 %
+  fprintf("Start processing data\n");
   data(any(ismissing(data),2),:) = [];
-
+  ir = randperm(size(data,1));
+  data = data(ir,:);
   x = data(:,{'x','x1','x2','x3','x4'});  
   y = data(:,{'stop'});
+  fprintf("End of data preprocessing\n");
 end
