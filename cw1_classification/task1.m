@@ -25,7 +25,7 @@ data_all = [label0_data(1:NUM_LABEL0_DATA,:); label1_data(1:NUM_LABEL1_DATA,:)];
 ir = randperm(NUM_LABEL0_DATA + NUM_LABEL1_DATA);
 data_all = data_all(ir,:);
 
-%% Task1 Linear model with kfold (Task3)
+%% Task1 Linear model with kfold(Task3)
 task1_start = tic;
 fold = 10;
 x = data_all(:, 1:4);
@@ -82,37 +82,5 @@ task1_elapsed = toc(task1_start);
 fprintf("Linear SVM training done in: %f seconds.\n",task1_elapsed);
 mean_confusion_matrix = mean_confusion_matrix/fold
 mean_accuracy = mean_accuracy / fold
-
-%% Task2 - Brute Force with Kfold (Task3)
-% parameter range setting
-
-param_range.c = 2.^(-3:3);
-kfold = 10;
-lfold = 10;
-x = data_all(:, 1:4);
-y = data_all(:,5);
-
-
-
-if TASK2_KF == "rbf"
-    param_range.sigma = 2.^(-3:3);
-    [c, sigma] = ndgrid(param_range.c, param_range.sigma);
-    param_grid = [sigma(:) c(:)];
-elseif TASK2_KF == "polynomial"
-    param_range.q = (2:4);
-    [c, q] = ndgrid(param_range.c, param_range.q);
-    param_grid = [q(:) c(:)];
-else
-    error("Invalid kernel function");
-end
-
-% parameter optimisation
-task2_start = tic;
-
-train(x,y,kfold,lfold,TASK2_KF,param_grid);
-
-tast2_end = toc(task2_start);
-fprintf("Optimisation of hyper-parameter done in: %f seconds.\n",tast2_end);
-
 
 
