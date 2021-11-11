@@ -2,7 +2,7 @@
 
 
 kernel_method = "polynomial";
-run("data/train.csv",10,10,kernel_method);
+run("data.csv",10,10,kernel_method);
 
 function run(file_path,kfold,lfold,kernel_method)
     data = load_data(file_path);
