@@ -25,7 +25,7 @@ data_all = [label0_data(1:NUM_LABEL0_DATA,:); label1_data(1:NUM_LABEL1_DATA,:)];
 ir = randperm(NUM_LABEL0_DATA + NUM_LABEL1_DATA);
 data_all = data_all(ir,:);
 
-%% Task1 Linear model
+%% Task1 Linear model with kfold (Task3)
 task1_start = tic;
 fold = 10;
 x = data_all(:, 1:4);
@@ -83,7 +83,7 @@ fprintf("Linear SVM training done in: %f seconds.\n",task1_elapsed);
 mean_confusion_matrix = mean_confusion_matrix/fold
 mean_accuracy = mean_accuracy / fold
 
-%% Task2 - Brute Force
+%% Task2 - Brute Force with Kfold (Task3)
 % parameter range setting
 
 param_range.c = 2.^(-3:3);
