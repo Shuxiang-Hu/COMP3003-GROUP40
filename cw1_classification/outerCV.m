@@ -1,5 +1,5 @@
 function [] = train(x,y,kfold,lfold,kernel_method,param_grid)
-    num_instances = height(x);
+    num_instances = size(x);
     fold_size = floor(num_instances/kfold);
     fold_start = 1;
     fold_end = fold_size;
