@@ -6,7 +6,7 @@ close all;
 filename = "data.csv";
 dataLines = [2, Inf];
 %% Set up the Import Options and import the data
-data = load_data(filename, dataLines);
+data = loadData(filename, dataLines);
 [x, y] = preprocess(data);
 
 %% train model
