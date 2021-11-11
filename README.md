@@ -11,7 +11,9 @@
 | Lekang Jiang        | 20124840       | scylj1 |
 
 
-| File Name          | Introduction |
+| Task         | Introduction |
 | ------------------ | ------------------ |
-| data_processing.m | 
-| cw1_classification/Classification.m          | mai |
+| Classification task 1 and 3 | run cw1_classification/task1_task3.m |
+| Classification task 2 and 3 | run cw1_classification/task2_task3.m |
+| Regression task 1 and 3 | run cw1_regression/task1_task3.m |
+| Regression task 2 and 3 | run cw1_regression/task2_task3.m |
