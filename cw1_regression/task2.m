@@ -2,10 +2,11 @@
 
 
 kernel_method = "polynomial";
+%kernel_method = "rbf";
 run("data.csv",10,10,kernel_method);
 
 function run(file_path,kfold,lfold,kernel_method)
-    data = load_data(file_path);
+    data = loadData(file_path);
     [x,y] = preprocess(data);
     
     param_range.c = 2.^(0:3);
