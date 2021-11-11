@@ -50,7 +50,7 @@ end
 % parameter optimisation
 task2_start = tic;
 
-train(x,y,kfold,lfold,TASK2_KF,param_grid);
+outerCV(x,y,kfold,lfold,TASK2_KF,param_grid);
 
 tast2_end = toc(task2_start);
 fprintf("Optimisation of hyper-parameter done in: %f seconds.\n",tast2_end);

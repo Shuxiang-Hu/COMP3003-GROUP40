@@ -23,7 +23,7 @@ function run(file_path,kfold,lfold,kernel_method)
         error("Invalid kernel function");
     end
     
-    [model,rmses] = train(x,y,kfold,lfold,kernel_method,param_grid);
+    [model,rmses] = outerCV(x,y,kfold,lfold,kernel_method,param_grid);
     
     for i = 1:size(rmses,2)
         fprintf('rmse of %dth fold: %f\n',i,rmses(i) );
